@@ -1,0 +1,414 @@
+# Mathlers Platform Configuration
+# This file controls all customizable aspects of the platform
+
+platform:
+  name: "Mathlers"
+  version: "1.0.0"
+  description: "AI-powered educational platform for mathematics through real-world records"
+  theme: "boxing_ring"
+  
+# Role-Based Access Control (RBAC)
+roles:
+  admin:
+    level: 100
+    permissions:
+      - manage_users
+      - manage_roles
+      - manage_content
+      - manage_system
+      - view_analytics
+      - manage_competitions
+      - manage_tournaments
+      - access_all_data
+      - configure_platform
+      - manage_subscriptions
+      - delete_content
+      - ban_users
+      
+  moderator:
+    level: 80
+    permissions:
+      - moderate_content
+      - view_reports
+      - manage_competitions
+      - view_analytics
+      - warn_users
+      - temporary_ban
+      
+  teacher:
+    level: 60
+    permissions:
+      - create_classes
+      - manage_students
+      - assign_practice
+      - view_student_progress
+      - create_custom_tests
+      - view_analytics
+      - join_competitions
+      
+  parent:
+    level: 40
+    permissions:
+      - view_child_progress
+      - manage_child_account
+      - view_recommendations
+      - purchase_subscriptions
+      
+  student:
+    level: 20
+    permissions:
+      - practice_mode
+      - join_competitions
+      - view_own_progress
+      - participate_tournaments
+      - earn_badges
+      - view_leaderboards
+      
+  guest:
+    level: 0
+    permissions:
+      - view_public_content
+      - register_account
+      - try_demo
+
+# Age Groups and Difficulty Levels
+age_groups:
+  beginner:
+    min_age: 8
+    max_age: 10
+    difficulty: easy
+    topics:
+      - basic_arithmetic
+      - simple_percentages
+      - basic_ratios
+      
+  intermediate:
+    min_age: 11
+    max_age: 13
+    difficulty: medium
+    topics:
+      - arithmetic
+      - percentages
+      - ratios
+      - basic_algebra
+      - geometry_basics
+      
+  advanced:
+    min_age: 14
+    max_age: 16
+    difficulty: hard
+    topics:
+      - algebra
+      - geometry
+      - probability
+      - statistics
+      - time_speed_distance
+      
+  expert:
+    min_age: 16
+    max_age: 18
+    difficulty: expert
+    topics:
+      - advanced_algebra
+      - trigonometry
+      - advanced_probability
+      - financial_math
+      - complex_statistics
+
+# Competition Settings
+competition:
+  modes:
+    practice:
+      enabled: true
+      time_limit_per_round: null
+      adaptive_difficulty: true
+      
+    sparring:
+      enabled: true
+      time_limit_per_round: 60
+      friendly: true
+      
+    ranked:
+      enabled: true
+      time_limit_per_round: 45
+      elo_based: true
+      
+    tournament:
+      enabled: true
+      bracket_size: [4, 8, 16, 32, 64]
+      elimination: single
+      
+  rounds:
+    warm_up:
+      questions: 3
+      multiplier: 1.0
+      
+    jab:
+      questions: 5
+      multiplier: 1.2
+      
+    hook:
+      questions: 5
+      multiplier: 1.5
+      
+    uppercut:
+      questions: 4
+      multiplier: 2.0
+      
+    knockout:
+      questions: 3
+      multiplier: 3.0
+      
+  scoring:
+    correct_answer: 100
+    speed_bonus_max: 50
+    streak_multiplier:
+      - threshold: 3
+        bonus: 1.1
+      - threshold: 5
+        bonus: 1.25
+      - threshold: 10
+        bonus: 1.5
+    comeback_bonus: 25
+    
+# Gamification
+gamification:
+  belts:
+    - name: "White Belt"
+      min_elo: 0
+      color: "#FFFFFF"
+    - name: "Yellow Belt"
+      min_elo: 500
+      color: "#FFD700"
+    - name: "Green Belt"
+      min_elo: 1000
+      color: "#00AA00"
+    - name: "Blue Belt"
+      min_elo: 1500
+      color: "#0066CC"
+    - name: "Red Belt"
+      min_elo: 2000
+      color: "#CC0000"
+    - name: "Black Belt"
+      min_elo: 2500
+      color: "#000000"
+    - name: "Champion Belt"
+      min_elo: 3000
+      color: "#FFD700"
+      
+  badges:
+    - id: first_blood
+      name: "First Victory"
+      description: "Win your first match"
+      icon: "🏆"
+    - id: streak_master
+      name: "Streak Master"
+      description: "Get 10 correct answers in a row"
+      icon: "🔥"
+    - id: comeback_kid
+      name: "Comeback Kid"
+      description: "Win after being behind"
+      icon: "💪"
+    - id: topic_master
+      name: "Topic Master"
+      description: "Master a specific math topic"
+      icon: "⭐"
+    - id: tournament_champion
+      name: "Tournament Champion"
+      description: "Win a tournament"
+      icon: "👑"
+
+# Data Sources Configuration
+data_sources:
+  guinness_world_records:
+    enabled: true
+    api_url: "https://api.guinnessworldrecords.com/v1"
+    update_frequency: daily
+    categories:
+      - sports
+      - gaming
+      - science
+      - entertainment
+      
+  esports_charts:
+    enabled: true
+    api_url: "https://escharts.com/api"
+    update_frequency: hourly
+    metrics:
+      - viewership
+      - prize_pools
+      - tournaments
+      
+  speedrun:
+    enabled: true
+    api_url: "https://www.speedrun.com/api/v1"
+    update_frequency: daily
+    games: all
+    
+  sports_reference:
+    enabled: true
+    api_url: "https://sports-reference.com/api"
+    update_frequency: daily
+    sports:
+      - athletics
+      - swimming
+      - basketball
+      - football
+      
+  steam:
+    enabled: true
+    api_url: "https://api.steampowered.com"
+    update_frequency: hourly
+    metrics:
+      - player_counts
+      - achievements
+
+# AI Model Configuration
+ai_model:
+  provider: "openai"  # Options: openai, anthropic, google, local
+  model_name: "gpt-4o"
+  temperature: 0.7
+  max_tokens: 2000
+  
+  # RAG Configuration
+  rag:
+    enabled: true
+    vector_store: "pinecone"
+    embedding_model: "text-embedding-ada-002"
+    top_k_results: 5
+    
+  # Fine-tuning
+  fine_tuning:
+    enabled: false
+    dataset_path: "./data/training_questions.jsonl"
+    
+  # Cost control
+  cost_limits:
+    daily_budget: 100
+    per_question_max: 0.01
+    
+# Database Configuration
+database:
+  type: "postgresql"
+  host: "${DB_HOST}"
+  port: 5432
+  name: "mathlers"
+  user: "${DB_USER}"
+  password: "${DB_PASSWORD}"
+  pool_size: 20
+  max_overflow: 10
+  
+# Cache Configuration
+cache:
+  type: "redis"
+  host: "${REDIS_HOST}"
+  port: 6379
+  db: 0
+  ttl:
+    questions: 3600
+    leaderboards: 300
+    user_sessions: 7200
+    
+# API Configuration
+api:
+  rate_limiting:
+    enabled: true
+    requests_per_minute: 60
+    burst_limit: 100
+    
+  cors:
+    allowed_origins:
+      - "https://mathlers.com"
+      - "https://app.mathlers.com"
+    allowed_methods:
+      - GET
+      - POST
+      - PUT
+      - DELETE
+    allow_credentials: true
+    
+  authentication:
+    jwt_secret: "${JWT_SECRET}"
+    token_expiry: 3600
+    refresh_token_expiry: 604800
+    
+# Security Settings
+security:
+  content_moderation:
+    enabled: true
+    auto_flag: true
+    review_threshold: 0.7
+    
+  data_protection:
+    encrypt_pii: true
+    gdpr_compliant: true
+    data_retention_days: 730
+    
+  ddos_protection:
+    enabled: true
+    cloudflare: true
+    
+# Deployment Configuration
+deployment:
+  environment: "production"  # Options: development, staging, production
+  
+  cloud_provider: "aws"
+  
+  scaling:
+    min_instances: 2
+    max_instances: 50
+    target_cpu_utilization: 70
+    
+  cdn:
+    enabled: true
+    provider: "cloudfront"
+    
+  monitoring:
+    enabled: true
+    tools:
+      - datadog
+      - sentry
+      - newrelic
+
+# Notification Settings
+notifications:
+  email:
+    enabled: true
+    provider: "sendgrid"
+    from_address: "noreply@mathlers.com"
+    
+  push:
+    enabled: true
+    provider: "firebase"
+    
+  in_app:
+    enabled: true
+    
+# Subscription Plans
+subscriptions:
+  free:
+    price: 0
+    features:
+      - limited_practice
+      - basic_competitions
+      - monthly_tournaments
+      
+  premium:
+    price: 9.99
+    billing: monthly
+    features:
+      - unlimited_practice
+      - all_competitions
+      - weekly_tournaments
+      - detailed_analytics
+      - priority_support
+      
+  school:
+    price: 49.99
+    billing: monthly
+    features:
+      - up_to_100_students
+      - teacher_dashboard
+      - custom_tests
+      - class_management
+      - school_leaderboards
