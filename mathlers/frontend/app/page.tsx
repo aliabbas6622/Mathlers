@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useUser, SignInButton, SignUpButton, UserButton } from '@clerk/nextjs';
 import { Button } from '@/components/Button';
 import { Badge } from '@/components/Badge';
 import { RecordCard } from '@/components/RecordCard';
@@ -21,6 +22,7 @@ interface Question {
 }
 
 export default function Home() {
+  const { isSignedIn, user, isLoaded } = useUser();
   const [question, setQuestion] = useState<Question | null>(null);
   const [loading, setLoading] = useState(false);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -66,7 +68,27 @@ export default function Home() {
           </div>
           <div className="flex items-center gap-4">
             <Badge variant="belt">BETA</Badge>
-            <Button size="sm" variant="outline">Sign In</Button>
+            {!isLoaded ? (
+              <div className="w-8 h-8 rounded-full bg-slate-800 animate-pulse" />
+            ) : isSignedIn ? (
+              <UserButton 
+                appearance={{
+                  elements: {
+                    avatarBox: "w-10 h-10",
+                    userButtonPopoverCard: "shadow-xl",
+                  }
+                }}
+              />
+            ) : (
+              <>
+                <SignInButton mode="modal">
+                  <Button size="sm" variant="outline">Sign In</Button>
+                </SignInButton>
+                <SignUpButton mode="modal">
+                  <Button size="sm" variant="primary">Sign Up</Button>
+                </SignUpButton>
+              </>
+            )}
           </div>
         </div>
       </header>
