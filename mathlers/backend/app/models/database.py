@@ -257,15 +257,15 @@ class RecordCard(Base):
     title = Column(String(255), nullable=False)
     description = Column(Text)
     holder = Column(String(255))  # Who holds the record
-    numeric_value = Column(Float, nullable=False)  # The actual record number
-    unit = Column(String(50))  # e.g., "seconds", "dollars", "viewers"
+    value = Column(Float, nullable=False)  # Canonical numeric value
+    unit = Column(String(50))  # e.g., "USD", "%", "seconds", "viewers"
     
     # Previous record for comparison questions
     previous_value = Column(Float)
     previous_holder = Column(String(255))
     
     # Metadata
-    date_achieved = Column(DateTime)
+    date = Column(DateTime)  # Renamed from date_achieved
     category = Column(SQLEnum(RecordCategory), nullable=False)
     subcategory = Column(String(100))  # e.g., "MOBA", "FPS" for esports
     location = Column(String(255))
@@ -278,7 +278,8 @@ class RecordCard(Base):
     math_topics = Column(JSON)  # ["percentages", "ratios"]
     
     # Data freshness
-    is_verified = Column(Boolean, default=False)
+    verified = Column(Boolean, default=False)  # Renamed from is_verified
+    version = Column(Integer, default=1)  # Version history
     last_updated = Column(DateTime, default=datetime.utcnow)
     update_frequency = Column(String(50))  # "daily", "hourly", "weekly"
     
