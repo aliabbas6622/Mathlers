@@ -1,0 +1,87 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: mathlers-db
+    environment:
+      POSTGRES_USER: mathlers_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
+      POSTGRES_DB: mathlers
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mathlers_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mathlers-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: mathlers-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mathlers-network
+
+  # Backend API
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mathlers-api
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://mathlers_user:${DB_PASSWORD:-changeme}@db:5432/mathlers
+      REDIS_URL: redis://redis:6379/0
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    networks:
+      - mathlers-network
+
+  # Database Migrations
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mathlers-migrate
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://mathlers_user:${DB_PASSWORD:-changeme}@db:5432/mathlers
+    command: alembic upgrade head
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - mathlers-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  mathlers-network:
+    driver: bridge

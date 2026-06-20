@@ -1,7 +1,17 @@
 """
 Mathlers Authentication & Authorization System
 Role-Based Access Control (RBAC) with JWT authentication
+
+DEPRECATED: This module is deprecated. Use the new FastAPI-based auth in app/api/v1/routes/auth.py
+This file is kept for backward compatibility only.
 """
+
+import warnings
+warnings.warn(
+    "app/core/auth.py is deprecated. Use app/api/v1/routes/auth.py instead.",
+    DeprecationWarning,
+    stacklevel=2
+)
 
 import jwt
 import bcrypt
@@ -12,6 +22,7 @@ from flask import request, jsonify, g
 from sqlalchemy.orm import Session
 
 # Configuration (should be loaded from settings.yaml in production)
+# DEPRECATED: Use settings from app.core.config.settings
 JWT_SECRET = "your-secret-key-change-in-production"
 JWT_ALGORITHM = "HS256"
 TOKEN_EXPIRY_HOURS = 1

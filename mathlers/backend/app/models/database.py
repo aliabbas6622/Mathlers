@@ -118,7 +118,7 @@ class User(Base):
     best_streak = Column(Integer, default=0)
     
     # Parent-Student relationship
-    parent_id = Column(Integer, ForeignKey("users.id"))
+    parent_id = Column(Integer, ForeignKey("users.id"), index=True)
     children = relationship("User", backref="parent", remote_side=[id])
     
     # Teacher-Class relationship
@@ -212,8 +212,8 @@ class Class(Base):
     description = Column(Text)
     grade_level = Column(String(50))
     
-    teacher_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    school_id = Column(Integer, ForeignKey("schools.id"))
+    teacher_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    school_id = Column(Integer, ForeignKey("schools.id"), index=True)
     
     teacher = relationship("User", back_populates="classes_taught")
     school = relationship("School", back_populates="classes")
@@ -294,7 +294,7 @@ class RecordCard(Base):
     __table_args__ = (
         Index('idx_record_category', 'category'),
         Index('idx_record_difficulty', 'difficulty_tags', postgresql_using='gin'),
-        Index('idx_record_date', 'date_achieved'),
+        Index('idx_record_date', 'date'),  # Fixed: was 'date_achieved' which doesn't exist
     )
 
 
