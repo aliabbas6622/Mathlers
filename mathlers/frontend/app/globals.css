@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --arena-primary: #ef4444; /* Red */
+  --arena-secondary: #3b82f6; /* Blue */
+  --arena-accent: #eab308; /* Gold */
+}
+
+body {
+  @apply antialiased;
+}
+
+@layer components {
+  .arena-card {
+    @apply bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-2xl;
+  }
+
+  .arena-button {
+    @apply px-6 py-3 rounded-lg font-bold transition-all active:scale-95 disabled:opacity-50;
+  }
+}
