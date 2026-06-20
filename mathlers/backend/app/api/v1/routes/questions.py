@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from typing import List
-from mathlers.backend.app.schemas.api_v1 import QuestionSchema
-from mathlers.backend.app.services.question_engine import MathlersEngine
+from schemas.api_v1 import QuestionSchema
+from services.question_engine import MathlersEngine
 
 router = APIRouter()
 engine = MathlersEngine()

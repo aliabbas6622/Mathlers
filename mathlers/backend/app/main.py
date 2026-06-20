@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from mathlers.backend.app.api.v1.routes import questions, matches, users
+from api.v1.routes import questions, matches, users
 
 app = FastAPI(title="Mathlers Platform API", version="1.0.0")
 

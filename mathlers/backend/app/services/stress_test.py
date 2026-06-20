@@ -2,7 +2,7 @@ import time
 import random
 import json
 from typing import List, Dict, Any
-from mathlers.backend.app.services.question_engine import MathlersEngine
+from .question_engine import MathlersEngine
 
 class StressTestHarness:
     """
@@ -120,7 +120,7 @@ class StressTestHarness:
         return summary
 
 if __name__ == "__main__":
-    from mathlers.backend.app.services.question_engine import MathlersEngine
+    from .question_engine import MathlersEngine
 
     engine = MathlersEngine()
     harness = StressTestHarness(engine)

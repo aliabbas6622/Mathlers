@@ -1,11 +1,11 @@
 from typing import Dict, Any, List, Optional
 import random
-from mathlers.backend.app.services.records.intelligence import RecordIntelligence
-from mathlers.backend.app.services.templates.engine import TemplateEngine
-from mathlers.backend.app.services.solver.engine import DeterministicSolver
-from mathlers.backend.app.services.validation.engine import ValidationEngine
-from mathlers.backend.app.services.mastery.engine import MasteryEngine
-from mathlers.backend.app.services.narrative.boxing_narrator import BoxingNarrator
+from .records.intelligence import RecordIntelligence
+from .templates.engine import TemplateEngine
+from .solver.engine import DeterministicSolver
+from .validation.engine import ValidationEngine
+from .mastery.engine import MasteryEngine
+from .narrative.boxing_narrator import BoxingNarrator
 
 class MathlersEngine:
     """
