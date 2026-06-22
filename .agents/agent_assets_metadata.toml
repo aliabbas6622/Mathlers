@@ -1,0 +1,8 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "nkY9j3JFnnQlHZ7zDsZnV"
+uri = "file://artifacts/mathlers/src/assets/images/hero.png"
+type = "image"
+title = "boxing ring math arena hero"

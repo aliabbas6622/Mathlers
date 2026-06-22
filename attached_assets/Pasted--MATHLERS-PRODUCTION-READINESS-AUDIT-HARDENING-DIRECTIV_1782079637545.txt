@@ -1,0 +1,377 @@
+# MATHLERS PRODUCTION READINESS AUDIT & HARDENING DIRECTIVE
+
+You are no longer acting as a feature developer.
+
+You are acting as:
+
+* Principal Software Architect
+* Principal Backend Engineer
+* Site Reliability Engineer (SRE)
+* Security Engineer
+* Database Architect
+* DevOps Engineer
+* QA/Test Engineering Lead
+* Scalability Consultant
+
+Your objective is NOT to add features.
+
+Your objective is to identify every possible reason the Mathlers platform could fail in production and eliminate those risks.
+
+Assume this platform will be used by real students, teachers, parents, and administrators.
+
+Assume bugs can impact educational outcomes, rankings, competition integrity, and organizational reputation.
+
+Think like an engineer responsible for keeping the platform alive for the next 10 years.
+
+────────────────────────────────────
+PHASE 1 — FULL SYSTEM AUDIT
+────────────────────────────────────
+
+Analyze the entire codebase and architecture.
+
+Produce a comprehensive audit covering:
+
+1. Backend Architecture
+2. Database Design
+3. Authentication
+4. Authorization
+5. AI Integration
+6. Question Generation Engine
+7. Validation Engine
+8. Competition System
+9. Ranking System
+10. Analytics
+11. Infrastructure
+12. DevOps
+13. Monitoring
+14. Logging
+15. Security
+16. Data Integrity
+17. Performance
+18. Scalability
+19. Reliability
+20. Disaster Recovery
+
+Do NOT assume anything is correct.
+
+Challenge every implementation.
+
+────────────────────────────────────
+PHASE 2 — DATABASE REVIEW
+────────────────────────────────────
+
+Inspect:
+
+* schema design
+* indexes
+* constraints
+* foreign keys
+* unique constraints
+* normalization
+* query patterns
+* migrations
+
+Identify:
+
+* N+1 query risks
+* missing indexes
+* expensive joins
+* duplicate data risks
+* orphan record risks
+* lock contention risks
+
+Produce:
+
+* critical findings
+* recommended fixes
+* migration plan
+
+Evaluate:
+
+* 100 users
+* 1000 users
+* 5000 users
+* 10000 users
+
+────────────────────────────────────
+PHASE 3 — API REVIEW
+────────────────────────────────────
+
+Inspect every endpoint.
+
+Verify:
+
+* authentication
+* authorization
+* validation
+* rate limiting
+* pagination
+* error handling
+* idempotency
+
+Identify:
+
+* abuse vectors
+* denial-of-service risks
+* data leakage risks
+* race conditions
+
+Every endpoint must have:
+
+* request schema
+* response schema
+* error schema
+
+────────────────────────────────────
+PHASE 4 — QUESTION ENGINE REVIEW
+────────────────────────────────────
+
+Verify:
+
+* deterministic answer generation
+* duplicate prevention
+* template correctness
+* validation coverage
+* traceability to Record Cards
+
+Generate stress tests:
+
+10,000
+50,000
+100,000
+250,000 questions
+
+Measure:
+
+* failure rate
+* duplicate rate
+* throughput
+* latency
+
+The engine must prove mathematical correctness.
+
+Do not trust implementation claims.
+
+Require evidence.
+
+────────────────────────────────────
+PHASE 5 — AI SAFETY REVIEW
+────────────────────────────────────
+
+Inspect all LLM interactions.
+
+Verify:
+
+* schema validation
+* structured outputs
+* fallback handling
+* timeout handling
+* retry strategy
+* provider failure handling
+
+Ensure AI is never trusted blindly.
+
+Every AI response must pass validation.
+
+Identify:
+
+* hallucination risks
+* malformed output risks
+* prompt injection risks
+
+────────────────────────────────────
+PHASE 6 — COMPETITION INTEGRITY REVIEW
+────────────────────────────────────
+
+Verify:
+
+* ELO calculations
+* leaderboard calculations
+* streak calculations
+* reward calculations
+
+Identify cheating vectors:
+
+* answer automation
+* API abuse
+* replay attacks
+* timing manipulation
+* duplicate accounts
+* score tampering
+
+Ensure all competition outcomes are computed server-side.
+
+Never trust client-side calculations.
+
+────────────────────────────────────
+PHASE 7 — SECURITY REVIEW
+────────────────────────────────────
+
+Perform threat modeling.
+
+Inspect:
+
+* JWT implementation
+* refresh tokens
+* RBAC
+* password storage
+* session management
+* CSRF protection
+* XSS protection
+* SQL injection protection
+* SSRF risks
+* file upload risks
+
+Classify findings:
+
+Critical
+High
+Medium
+Low
+
+────────────────────────────────────
+PHASE 8 — RELIABILITY REVIEW
+────────────────────────────────────
+
+Verify:
+
+* retries
+* circuit breakers
+* graceful degradation
+* queue failure recovery
+* cache failure recovery
+* database failure recovery
+
+Ask:
+
+What happens if:
+
+* Redis goes down?
+* PostgreSQL goes down?
+* AI provider goes down?
+* External record source goes down?
+
+The system must continue operating whenever possible.
+
+────────────────────────────────────
+PHASE 9 — OBSERVABILITY REVIEW
+────────────────────────────────────
+
+Verify:
+
+Logging:
+
+* structured logs
+* correlation IDs
+* audit logs
+
+Monitoring:
+
+* API latency
+* database latency
+* cache hit rates
+* queue performance
+* AI latency
+* validation failures
+
+Alerting:
+
+* error spikes
+* service outages
+* suspicious activity
+
+────────────────────────────────────
+PHASE 10 — DISASTER RECOVERY REVIEW
+────────────────────────────────────
+
+Inspect:
+
+* backups
+* restore procedures
+* recovery testing
+* retention policies
+
+Verify:
+
+* daily backups
+* automated backups
+* restore validation
+
+The existence of backups is NOT sufficient.
+
+Prove restoration works.
+
+────────────────────────────────────
+PHASE 11 — FRONTEND PRODUCTION REVIEW
+────────────────────────────────────
+
+Verify:
+
+* accessibility
+* mobile responsiveness
+* bundle size
+* caching strategy
+* lazy loading
+* route protection
+* websocket handling
+* offline behavior
+
+Evaluate:
+
+slow network
+high latency
+mobile devices
+older browsers
+
+────────────────────────────────────
+PHASE 12 — FINAL RISK REPORT
+────────────────────────────────────
+
+Produce:
+
+1. Executive Summary
+
+2. Architecture Risk Score
+   (0–100)
+
+3. Security Risk Score
+   (0–100)
+
+4. Scalability Risk Score
+   (0–100)
+
+5. Reliability Risk Score
+   (0–100)
+
+6. Production Readiness Score
+   (0–100)
+
+7. Critical Findings
+
+8. High-Risk Findings
+
+9. Medium-Risk Findings
+
+10. Low-Risk Findings
+
+11. Recommended Fixes
+
+12. Prioritized Remediation Roadmap
+
+────────────────────────────────────
+FINAL RULE
+────────────────────────────────────
+
+Do NOT assume the system is production-ready.
+
+Attempt to break the system.
+
+Attempt to find failure points.
+
+Attempt to identify future scaling problems.
+
+Act like an external auditor hired to find every weakness before launch.
+
+Your goal is not approval.
+
+Your goal is discovering what could fail.

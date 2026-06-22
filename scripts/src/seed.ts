@@ -1,0 +1,368 @@
+import { db, recordCardsTable, studentsTable, templatesTable, questionsTable } from "@workspace/db";
+import crypto from "crypto";
+
+async function seed() {
+  console.log("🌱 Seeding database...");
+
+  // ---------- Record Cards ----------
+  const cards = await db.insert(recordCardsTable).values([
+    {
+      title: "Esports World Cup 2025 Total Prize Pool",
+      holder: "EWC",
+      value: "75000000",
+      unit: "USD",
+      previousValue: "60000000",
+      category: "esports",
+      difficulty: "medium",
+      ageRange: "11-18",
+      recordDate: "2025-08-01",
+      location: "Riyadh, Saudi Arabia",
+      source: "Esports World Cup Foundation",
+      sourceUrl: "https://esportsworldcup.com",
+      verified: true,
+    },
+    {
+      title: "Fortnite World Cup Solo Prize Pool",
+      holder: "Epic Games",
+      value: "3000000",
+      unit: "USD",
+      previousValue: "1500000",
+      category: "esports",
+      difficulty: "medium",
+      ageRange: "11-18",
+      recordDate: "2019-07-28",
+      location: "New York, USA",
+      source: "Epic Games",
+      sourceUrl: "https://epicgames.com",
+      verified: true,
+    },
+    {
+      title: "Highest Twitch Concurrent Viewership",
+      holder: "League of Legends Worlds 2022",
+      value: "5418432",
+      unit: "viewers",
+      previousValue: "3950000",
+      category: "esports",
+      difficulty: "hard",
+      ageRange: "11-18",
+      recordDate: "2022-11-05",
+      location: "San Francisco, USA",
+      source: "Twitch",
+      sourceUrl: "https://twitchtracker.com",
+      verified: true,
+    },
+    {
+      title: "Most Viewers for a Single Streamer (Peak)",
+      holder: "xQc",
+      value: "222713",
+      unit: "concurrent viewers",
+      previousValue: "150000",
+      category: "esports",
+      difficulty: "easy",
+      ageRange: "8-18",
+      recordDate: "2023-03-15",
+      location: "Online",
+      source: "TwitchTracker",
+      sourceUrl: "https://twitchtracker.com",
+      verified: true,
+    },
+    {
+      title: "The International 2023 DOTA 2 Prize Pool",
+      holder: "Valve Corporation",
+      value: "3308608",
+      unit: "USD",
+      previousValue: "18877521",
+      category: "esports",
+      difficulty: "hard",
+      ageRange: "14-18",
+      recordDate: "2023-10-29",
+      location: "Seattle, USA",
+      source: "Valve Corporation",
+      sourceUrl: "https://www.dota2.com",
+      verified: true,
+    },
+    {
+      title: "CS:GO Major Championship Prize Pool",
+      holder: "Valve",
+      value: "1250000",
+      unit: "USD",
+      previousValue: "1000000",
+      category: "esports",
+      difficulty: "medium",
+      ageRange: "11-18",
+      recordDate: "2023-05-21",
+      location: "Paris, France",
+      source: "Valve",
+      verified: true,
+    },
+    {
+      title: "FIFA World Cup 2026 Total Prize Money",
+      holder: "FIFA",
+      value: "1000000000",
+      unit: "USD",
+      previousValue: "500000000",
+      category: "sports",
+      difficulty: "easy",
+      ageRange: "8-18",
+      recordDate: "2026-07-19",
+      location: "USA / Canada / Mexico",
+      source: "FIFA",
+      sourceUrl: "https://fifa.com",
+      verified: true,
+    },
+    {
+      title: "Usain Bolt 100m World Record",
+      holder: "Usain Bolt",
+      value: "9.58",
+      unit: "seconds",
+      previousValue: "9.69",
+      category: "sports",
+      difficulty: "hard",
+      ageRange: "11-18",
+      recordDate: "2009-08-16",
+      location: "Berlin, Germany",
+      source: "World Athletics",
+      sourceUrl: "https://worldathletics.org",
+      verified: true,
+    },
+    {
+      title: "NBA Record: Most Points in a Single Game",
+      holder: "Wilt Chamberlain",
+      value: "100",
+      unit: "points",
+      previousValue: "78",
+      category: "sports",
+      difficulty: "easy",
+      ageRange: "8-13",
+      recordDate: "1962-03-02",
+      location: "Hershey, Pennsylvania",
+      source: "NBA",
+      sourceUrl: "https://nba.com",
+      verified: true,
+    },
+    {
+      title: "Minecraft Speedrun World Record (Any%)",
+      holder: "Crumble",
+      value: "136",
+      unit: "seconds",
+      previousValue: "148",
+      category: "gaming",
+      difficulty: "medium",
+      ageRange: "11-18",
+      recordDate: "2024-02-10",
+      location: "Online",
+      source: "Speedrun.com",
+      sourceUrl: "https://speedrun.com",
+      verified: true,
+    },
+    {
+      title: "Most Subscribed YouTube Channel",
+      holder: "MrBeast",
+      value: "340000000",
+      unit: "subscribers",
+      previousValue: "200000000",
+      category: "entertainment",
+      difficulty: "easy",
+      ageRange: "8-18",
+      recordDate: "2024-06-01",
+      location: "Online",
+      source: "YouTube",
+      sourceUrl: "https://youtube.com",
+      verified: true,
+    },
+    {
+      title: "Speed of Light",
+      holder: null,
+      value: "299792458",
+      unit: "meters/second",
+      category: "science",
+      difficulty: "expert",
+      ageRange: "14-18",
+      recordDate: null,
+      source: "NIST",
+      sourceUrl: "https://nist.gov",
+      verified: true,
+    },
+    {
+      title: "Highest Altitude Skydive",
+      holder: "Felix Baumgartner",
+      value: "39045",
+      unit: "meters",
+      previousValue: "31330",
+      category: "sports",
+      difficulty: "medium",
+      ageRange: "11-18",
+      recordDate: "2012-10-14",
+      location: "New Mexico, USA",
+      source: "Red Bull Stratos",
+      verified: true,
+    },
+    {
+      title: "Longest Winning Streak in Esports (League of Legends)",
+      holder: "T1 (Faker)",
+      value: "25",
+      unit: "consecutive wins",
+      previousValue: "18",
+      category: "esports",
+      difficulty: "easy",
+      ageRange: "8-14",
+      recordDate: "2023-11-19",
+      location: "Seoul, South Korea",
+      source: "Riot Games",
+      sourceUrl: "https://lolesports.com",
+      verified: true,
+    },
+    {
+      title: "Highest Earning Esports Player (All Time)",
+      holder: "Johan 'N0tail' Sundstein",
+      value: "7184163",
+      unit: "USD",
+      category: "esports",
+      difficulty: "hard",
+      ageRange: "14-18",
+      recordDate: "2023-01-01",
+      source: "Esports Earnings",
+      sourceUrl: "https://esportsearnings.com",
+      verified: true,
+    },
+  ]).onConflictDoNothing().returning();
+
+  console.log(`✅ Inserted ${cards.length} record cards`);
+
+  // ---------- Student ----------
+  const students = await db.insert(studentsTable).values([
+    {
+      username: "champion",
+      displayName: "Champion",
+      email: null,
+      ageGroup: "11-13",
+      school: "Mathlers Academy",
+      elo: 1000,
+      belt: "bronze",
+      streak: 0,
+      totalMatches: 0,
+      totalWins: 0,
+      favoriteTopics: ["arithmetic", "percentages"],
+    },
+  ]).onConflictDoNothing().returning();
+
+  console.log(`✅ Inserted ${students.length} students`);
+
+  // ---------- Templates ----------
+  const templates = await db.insert(templatesTable).values([
+    {
+      name: "Percentage Change",
+      topic: "percentages",
+      difficulty: "medium",
+      templateText: "{{record_title}} changed from {{previous_value}} to {{current_value}} {{unit}}. What is the percentage change?",
+      variables: ["record_title", "previous_value", "current_value", "unit"],
+      mathOperation: "percentage_change",
+      exampleOutput: "((new - old) / old) × 100",
+    },
+    {
+      name: "Equal Division",
+      topic: "arithmetic",
+      difficulty: "easy",
+      templateText: "{{record_title}} totals {{value}} {{unit}}. If split equally among {{divisor}} groups, how much does each group get?",
+      variables: ["record_title", "value", "unit", "divisor"],
+      mathOperation: "division",
+      exampleOutput: "value / divisor",
+    },
+    {
+      name: "Ratio Comparison",
+      topic: "ratios",
+      difficulty: "medium",
+      templateText: "{{record_title}} achieves {{value}} {{unit}}. Express the ratio of {{value}} to {{comparison_value}}.",
+      variables: ["record_title", "value", "unit", "comparison_value"],
+      mathOperation: "ratio",
+      exampleOutput: "a : b simplified",
+    },
+    {
+      name: "Multi-Step Word Problem",
+      topic: "algebra",
+      difficulty: "hard",
+      templateText: "{{record_title}} currently holds {{value}} {{unit}}. If it grows by {{growth_rate}}% each year, what will it be in {{years}} years?",
+      variables: ["record_title", "value", "unit", "growth_rate", "years"],
+      mathOperation: "compound_growth",
+      exampleOutput: "P × (1 + r)^n",
+    },
+  ]).onConflictDoNothing().returning();
+
+  console.log(`✅ Inserted ${templates.length} templates`);
+
+  // ---------- Seed a few pre-built questions ----------
+  const firstCard = cards[0]; // EWC Prize Pool
+  if (firstCard) {
+    const q = {
+      recordCardId: firstCard.id,
+      templateId: templates[0]?.id ?? null,
+      roundName: "Warmup",
+      topic: "percentages",
+      difficulty: "easy",
+      scenario: "The Esports World Cup 2025 shattered all prize pool records, climbing from $60M to a staggering $75M! Fans worldwide couldn't believe the numbers as the championship crowned a new era of competitive gaming.",
+      questionText: "The EWC prize pool grew from $60,000,000 to $75,000,000. What is the percentage increase?",
+      options: ["25%", "20%", "15%", "30%"],
+      correctAnswer: "25%",
+      steps: ["Formula: ((new - old) / old) × 100", "= ((75,000,000 - 60,000,000) / 60,000,000) × 100", "= (15,000,000 / 60,000,000) × 100", "= 0.25 × 100", "= 25%"],
+      knockoutChallenge: "If the prize pool grows by another 20% next year, what will it be?",
+      hash: crypto.createHash("sha256").update("ewc-percentage-q1").digest("hex"),
+      validated: true,
+      timeLimitSeconds: 90,
+      pointValue: 50,
+      providerId: null,
+    };
+
+    await db.insert(questionsTable).values([q]).onConflictDoNothing();
+
+    // Arithmetic question
+    const q2 = {
+      recordCardId: firstCard.id,
+      templateId: templates[1]?.id ?? null,
+      roundName: "Jab",
+      topic: "arithmetic",
+      difficulty: "medium",
+      scenario: "The Esports World Cup 2025 prize pool hit $75,000,000 — split across 24 featured games! Each game brings its own champions, glory, and a share of the record-breaking purse.",
+      questionText: "The $75,000,000 EWC prize pool is split equally among 24 featured games. How much does each game receive?",
+      options: ["$3,125,000", "$3,000,000", "$3,250,000", "$2,875,000"],
+      correctAnswer: "$3,125,000",
+      steps: ["Divide total by number of games: 75,000,000 ÷ 24", "= 3,125,000"],
+      knockoutChallenge: "If 3 games share a bonus $1,500,000 pool equally, what does each receive?",
+      hash: crypto.createHash("sha256").update("ewc-arithmetic-q2").digest("hex"),
+      validated: true,
+      timeLimitSeconds: 60,
+      pointValue: 100,
+      providerId: null,
+    };
+
+    await db.insert(questionsTable).values([q2]).onConflictDoNothing();
+  }
+
+  // Third card — Twitch viewers
+  const twitchCard = cards[2];
+  if (twitchCard) {
+    await db.insert(questionsTable).values([{
+      recordCardId: twitchCard.id,
+      templateId: templates[0]?.id ?? null,
+      roundName: "Hook",
+      topic: "percentages",
+      difficulty: "hard",
+      scenario: "League of Legends Worlds 2022 broke the internet — 5,418,432 viewers tuned in at peak, up from 3,950,000 the previous year. The whole world watched history being made!",
+      questionText: "Twitch viewership jumped from 3,950,000 to 5,418,432 for LoL Worlds 2022. What is the percentage increase (to 1 decimal place)?",
+      options: ["37.2%", "35.9%", "38.0%", "36.5%"],
+      correctAnswer: "37.2%",
+      steps: ["Change = 5,418,432 - 3,950,000 = 1,468,432", "% change = (1,468,432 / 3,950,000) × 100", "= 37.17... ≈ 37.2%"],
+      knockoutChallenge: "If viewership grows by the same percentage in 2023, what would peak viewers be?",
+      hash: crypto.createHash("sha256").update("twitch-percentage-q1").digest("hex"),
+      validated: true,
+      timeLimitSeconds: 45,
+      pointValue: 150,
+      providerId: null,
+    }]).onConflictDoNothing();
+  }
+
+  console.log("✅ Questions seeded");
+  console.log("🎉 Database seeded successfully!");
+  process.exit(0);
+}
+
+seed().catch(err => { console.error(err); process.exit(1); });

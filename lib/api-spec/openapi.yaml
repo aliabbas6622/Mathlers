@@ -1,0 +1,1085 @@
+openapi: 3.1.0
+info:
+  title: Api
+  version: 0.1.0
+  description: Mathlers API — boxing-themed AI math competition platform
+servers:
+  - url: /api/v1
+    description: Versioned API — v1
+  - url: /api
+    description: Legacy base path (backward-compat, deprecated)
+tags:
+  - name: health
+    description: Health operations
+  - name: record-cards
+    description: Real-world record card management
+  - name: templates
+    description: Question template management
+  - name: questions
+    description: Question generation and retrieval
+  - name: students
+    description: Student management
+  - name: matches
+    description: Match and competition management
+  - name: leaderboards
+    description: Rankings and leaderboards
+  - name: analytics
+    description: Analytics and reporting
+  - name: providers
+    description: LLM provider management
+
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  # ─── RECORD CARDS ───────────────────────────────────────────────
+  /record-cards:
+    get:
+      operationId: listRecordCards
+      tags: [record-cards]
+      summary: List all record cards
+      parameters:
+        - in: query
+          name: category
+          schema: { type: string }
+        - in: query
+          name: difficulty
+          schema: { type: string }
+        - in: query
+          name: limit
+          schema: { type: integer, default: 20 }
+        - in: query
+          name: offset
+          schema: { type: integer, default: 0 }
+      responses:
+        "200":
+          description: List of record cards
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RecordCard"
+    post:
+      operationId: createRecordCard
+      tags: [record-cards]
+      summary: Create a new record card
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RecordCardInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecordCard"
+
+  /record-cards/{id}:
+    get:
+      operationId: getRecordCard
+      tags: [record-cards]
+      summary: Get a record card by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Record card
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecordCard"
+        "404":
+          description: Not found
+
+  /record-cards/scrape:
+    post:
+      operationId: scrapeRecordCards
+      tags: [record-cards]
+      summary: Trigger web scraping for new records
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ScrapeInput"
+      responses:
+        "200":
+          description: Scrape job queued
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ScrapeResult"
+
+  /record-cards/stats:
+    get:
+      operationId: getRecordCardStats
+      tags: [record-cards]
+      summary: Get record card statistics by category
+      responses:
+        "200":
+          description: Record card stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecordCardStats"
+
+  # ─── TEMPLATES ──────────────────────────────────────────────────
+  /templates:
+    get:
+      operationId: listTemplates
+      tags: [templates]
+      summary: List question templates
+      parameters:
+        - in: query
+          name: topic
+          schema: { type: string }
+        - in: query
+          name: difficulty
+          schema: { type: string }
+      responses:
+        "200":
+          description: List of templates
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/QuestionTemplate"
+    post:
+      operationId: createTemplate
+      tags: [templates]
+      summary: Create a new question template
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuestionTemplateInput"
+      responses:
+        "201":
+          description: Created template
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestionTemplate"
+
+  /templates/{id}:
+    get:
+      operationId: getTemplate
+      tags: [templates]
+      summary: Get a template by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Template
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestionTemplate"
+
+  # ─── QUESTIONS ──────────────────────────────────────────────────
+  /questions:
+    get:
+      operationId: listQuestions
+      tags: [questions]
+      summary: List generated questions
+      parameters:
+        - in: query
+          name: difficulty
+          schema: { type: string }
+        - in: query
+          name: topic
+          schema: { type: string }
+        - in: query
+          name: recordCardId
+          schema: { type: integer }
+        - in: query
+          name: limit
+          schema: { type: integer, default: 20 }
+        - in: query
+          name: offset
+          schema: { type: integer, default: 0 }
+      responses:
+        "200":
+          description: List of questions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Question"
+
+  /questions/generate:
+    post:
+      operationId: generateQuestion
+      tags: [questions]
+      summary: Generate a new question using AI pipeline
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GenerateQuestionInput"
+      responses:
+        "200":
+          description: Generated question
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Question"
+
+  /questions/{id}:
+    get:
+      operationId: getQuestion
+      tags: [questions]
+      summary: Get a question by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Question
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Question"
+
+  /questions/{id}/validate:
+    post:
+      operationId: validateQuestion
+      tags: [questions]
+      summary: Re-validate a question's math correctness
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Validation result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationResult"
+
+  # ─── STUDENTS ───────────────────────────────────────────────────
+  /students:
+    get:
+      operationId: listStudents
+      tags: [students]
+      summary: List students
+      parameters:
+        - in: query
+          name: limit
+          schema: { type: integer, default: 20 }
+        - in: query
+          name: offset
+          schema: { type: integer, default: 0 }
+      responses:
+        "200":
+          description: List of students
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Student"
+    post:
+      operationId: createStudent
+      tags: [students]
+      summary: Create a new student
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudentInput"
+      responses:
+        "201":
+          description: Created student
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Student"
+
+  /students/{id}:
+    get:
+      operationId: getStudent
+      tags: [students]
+      summary: Get a student by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Student
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Student"
+
+  /students/{id}/mastery:
+    get:
+      operationId: getStudentMastery
+      tags: [students]
+      summary: Get student's topic mastery breakdown
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Topic mastery
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TopicMastery"
+
+  /students/{id}/recommendations:
+    get:
+      operationId: getStudentRecommendations
+      tags: [students]
+      summary: Get personalized practice recommendations
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Recommendations
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Recommendations"
+
+  /students/{id}/stats:
+    get:
+      operationId: getStudentStats
+      tags: [students]
+      summary: Get student's performance statistics
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Student stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentStats"
+
+  # ─── MATCHES ────────────────────────────────────────────────────
+  /matches:
+    get:
+      operationId: listMatches
+      tags: [matches]
+      summary: List matches
+      parameters:
+        - in: query
+          name: studentId
+          schema: { type: integer }
+        - in: query
+          name: status
+          schema: { type: string }
+        - in: query
+          name: limit
+          schema: { type: integer, default: 20 }
+        - in: query
+          name: offset
+          schema: { type: integer, default: 0 }
+      responses:
+        "200":
+          description: List of matches
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Match"
+    post:
+      operationId: createMatch
+      tags: [matches]
+      summary: Start a new match
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MatchInput"
+      responses:
+        "201":
+          description: Match created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Match"
+
+  /matches/{id}:
+    get:
+      operationId: getMatch
+      tags: [matches]
+      summary: Get a match by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Match
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Match"
+
+  /matches/{id}/answer:
+    post:
+      operationId: submitAnswer
+      tags: [matches]
+      summary: Submit an answer for the current round
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AnswerInput"
+      responses:
+        "200":
+          description: Answer result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnswerResult"
+
+  /matches/{id}/complete:
+    post:
+      operationId: completeMatch
+      tags: [matches]
+      summary: Complete a match and save results
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Match summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MatchSummary"
+
+  # ─── LEADERBOARDS ───────────────────────────────────────────────
+  /leaderboards:
+    get:
+      operationId: getLeaderboard
+      tags: [leaderboards]
+      summary: Get leaderboard
+      parameters:
+        - in: query
+          name: period
+          schema: { type: string, enum: [daily, weekly, monthly, all-time] }
+        - in: query
+          name: scope
+          schema: { type: string, enum: [global, school, class, age-group] }
+        - in: query
+          name: topic
+          schema: { type: string }
+        - in: query
+          name: limit
+          schema: { type: integer, default: 50 }
+        - in: query
+          name: offset
+          schema: { type: integer, default: 0 }
+      responses:
+        "200":
+          description: Leaderboard entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LeaderboardEntry"
+
+  # ─── ANALYTICS ──────────────────────────────────────────────────
+  /analytics/overview:
+    get:
+      operationId: getAnalyticsOverview
+      tags: [analytics]
+      summary: Get platform-wide analytics overview
+      responses:
+        "200":
+          description: Analytics overview
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnalyticsOverview"
+
+  /analytics/difficulty-distribution:
+    get:
+      operationId: getDifficultyDistribution
+      tags: [analytics]
+      summary: Get question difficulty distribution across topics
+      responses:
+        "200":
+          description: Difficulty distribution
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DifficultyBucket"
+
+  /analytics/performance-trend:
+    get:
+      operationId: getPerformanceTrend
+      tags: [analytics]
+      summary: Get platform performance trend over time
+      parameters:
+        - in: query
+          name: days
+          schema: { type: integer, default: 30 }
+      responses:
+        "200":
+          description: Performance trend data
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TrendPoint"
+
+  /analytics/topic-breakdown:
+    get:
+      operationId: getTopicBreakdown
+      tags: [analytics]
+      summary: Get accuracy breakdown by math topic
+      responses:
+        "200":
+          description: Topic breakdown
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TopicBreakdown"
+
+  # ─── PROVIDERS ──────────────────────────────────────────────────
+  /providers:
+    get:
+      operationId: listProviders
+      tags: [providers]
+      summary: List LLM providers and their status
+      responses:
+        "200":
+          description: Provider list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Provider"
+
+  /providers/usage:
+    get:
+      operationId: getProviderUsage
+      tags: [providers]
+      summary: Get LLM provider usage statistics
+      responses:
+        "200":
+          description: Provider usage stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProviderUsage"
+
+# ─── DASHBOARD ────────────────────────────────────────────────────
+  /dashboard:
+    get:
+      operationId: getDashboard
+      tags: [analytics]
+      summary: Get student dashboard summary
+      parameters:
+        - in: query
+          name: studentId
+          schema: { type: integer }
+      responses:
+        "200":
+          description: Dashboard data
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardData"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      required: [status]
+      properties:
+        status: { type: string }
+
+    RecordCard:
+      type: object
+      required: [id, title, value, unit, category, difficulty, source, verified, createdAt]
+      properties:
+        id: { type: integer }
+        title: { type: string }
+        holder: { type: ["string", "null"] }
+        value: { type: number }
+        unit: { type: string }
+        previousValue: { type: ["number", "null"] }
+        category: { type: string }
+        subcategory: { type: ["string", "null"] }
+        difficulty: { type: string }
+        ageRange: { type: string }
+        recordDate: { type: ["string", "null"] }
+        location: { type: ["string", "null"] }
+        source: { type: string }
+        sourceUrl: { type: ["string", "null"] }
+        verified: { type: boolean }
+        version: { type: integer }
+        createdAt: { type: string }
+
+    RecordCardInput:
+      type: object
+      required: [title, value, unit, category, difficulty, source]
+      properties:
+        title: { type: string }
+        holder: { type: string }
+        value: { type: number }
+        unit: { type: string }
+        previousValue: { type: number }
+        category: { type: string }
+        subcategory: { type: string }
+        difficulty: { type: string }
+        ageRange: { type: string }
+        recordDate: { type: string }
+        location: { type: string }
+        source: { type: string }
+        sourceUrl: { type: string }
+
+    RecordCardStats:
+      type: object
+      required: [total, byCategory, recentlyAdded]
+      properties:
+        total: { type: integer }
+        byCategory:
+          type: array
+          items:
+            type: object
+            required: [category, count]
+            properties:
+              category: { type: string }
+              count: { type: integer }
+        recentlyAdded: { type: integer }
+
+    ScrapeInput:
+      type: object
+      required: [sources]
+      properties:
+        sources:
+          type: array
+          items: { type: string }
+        categories:
+          type: array
+          items: { type: string }
+
+    ScrapeResult:
+      type: object
+      required: [jobId, status, message]
+      properties:
+        jobId: { type: string }
+        status: { type: string }
+        message: { type: string }
+
+    QuestionTemplate:
+      type: object
+      required: [id, name, topic, difficulty, templateText, variables, mathOperation, createdAt]
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        topic: { type: string }
+        difficulty: { type: string }
+        templateText: { type: string }
+        variables:
+          type: array
+          items: { type: string }
+        mathOperation: { type: string }
+        exampleOutput: { type: ["string", "null"] }
+        usageCount: { type: integer }
+        createdAt: { type: string }
+
+    QuestionTemplateInput:
+      type: object
+      required: [name, topic, difficulty, templateText, variables, mathOperation]
+      properties:
+        name: { type: string }
+        topic: { type: string }
+        difficulty: { type: string }
+        templateText: { type: string }
+        variables:
+          type: array
+          items: { type: string }
+        mathOperation: { type: string }
+        exampleOutput: { type: string }
+
+    Question:
+      type: object
+      required: [id, recordCardId, templateId, roundName, topic, difficulty, scenario, questionText, options, correctAnswer, steps, hash, validated, createdAt]
+      properties:
+        id: { type: integer }
+        recordCardId: { type: integer }
+        templateId: { type: integer }
+        roundName: { type: string }
+        topic: { type: string }
+        difficulty: { type: string }
+        scenario: { type: string }
+        questionText: { type: string }
+        options:
+          type: array
+          items: { type: string }
+        correctAnswer: { type: string }
+        steps:
+          type: array
+          items: { type: string }
+        knockoutChallenge: { type: ["string", "null"] }
+        hash: { type: string }
+        validated: { type: boolean }
+        timeLimitSeconds: { type: integer }
+        pointValue: { type: integer }
+        createdAt: { type: string }
+        recordCard:
+          $ref: "#/components/schemas/RecordCard"
+
+    GenerateQuestionInput:
+      type: object
+      required: [recordCardId, difficulty, topic]
+      properties:
+        recordCardId: { type: integer }
+        difficulty: { type: string }
+        topic: { type: string }
+        templateId: { type: ["integer", "null"] }
+        roundName: { type: string }
+        providerId: { type: ["string", "null"] }
+
+    ValidationResult:
+      type: object
+      required: [valid, message]
+      properties:
+        valid: { type: boolean }
+        message: { type: string }
+        recomputedAnswer: { type: ["string", "null"] }
+        steps:
+          type: array
+          items: { type: string }
+
+    Student:
+      type: object
+      required: [id, username, displayName, ageGroup, elo, belt, streak, totalMatches, totalWins, createdAt]
+      properties:
+        id: { type: integer }
+        username: { type: string }
+        displayName: { type: string }
+        email: { type: ["string", "null"] }
+        ageGroup: { type: string }
+        school: { type: ["string", "null"] }
+        elo: { type: integer }
+        belt: { type: string }
+        streak: { type: integer }
+        totalMatches: { type: integer }
+        totalWins: { type: integer }
+        favoriteTopics:
+          type: array
+          items: { type: string }
+        createdAt: { type: string }
+
+    StudentInput:
+      type: object
+      required: [username, displayName, ageGroup]
+      properties:
+        username: { type: string }
+        displayName: { type: string }
+        email: { type: string }
+        ageGroup: { type: string }
+        school: { type: string }
+        favoriteTopics:
+          type: array
+          items: { type: string }
+
+    StudentStats:
+      type: object
+      required: [studentId, totalQuestions, correctAnswers, accuracy, avgResponseTime, currentStreak, longestStreak, elo, belt]
+      properties:
+        studentId: { type: integer }
+        totalQuestions: { type: integer }
+        correctAnswers: { type: integer }
+        accuracy: { type: number }
+        avgResponseTime: { type: number }
+        currentStreak: { type: integer }
+        longestStreak: { type: integer }
+        elo: { type: integer }
+        belt: { type: string }
+        weeklyGrowth: { type: number }
+
+    TopicMastery:
+      type: object
+      required: [topic, mastery, accuracy, avgResponseTime, questionsAttempted, trend]
+      properties:
+        topic: { type: string }
+        mastery: { type: number }
+        accuracy: { type: number }
+        avgResponseTime: { type: number }
+        questionsAttempted: { type: integer }
+        trend: { type: string }
+
+    Recommendations:
+      type: object
+      required: [practiceTopics, nextDifficulty, dailyChallenge]
+      properties:
+        practiceTopics:
+          type: array
+          items: { type: string }
+        nextDifficulty: { type: string }
+        dailyChallenge:
+          $ref: "#/components/schemas/Question"
+        weakAreas:
+          type: array
+          items: { type: string }
+
+    Match:
+      type: object
+      required: [id, studentId, mode, difficulty, status, currentRound, score, accuracy, streak, createdAt]
+      properties:
+        id: { type: integer }
+        studentId: { type: integer }
+        mode: { type: string }
+        difficulty: { type: string }
+        status: { type: string }
+        currentRound: { type: integer }
+        totalRounds: { type: integer }
+        score: { type: integer }
+        accuracy: { type: number }
+        streak: { type: integer }
+        comboMultiplier: { type: number }
+        currentQuestion:
+          $ref: "#/components/schemas/Question"
+        rounds:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoundSummary"
+        createdAt: { type: string }
+
+    MatchInput:
+      type: object
+      required: [studentId, mode, difficulty]
+      properties:
+        studentId: { type: integer }
+        mode: { type: string }
+        difficulty: { type: string }
+        topics:
+          type: array
+          items: { type: string }
+        opponentId: { type: ["integer", "null"] }
+
+    RoundSummary:
+      type: object
+      required: [roundNumber, roundName, questionId, correct, responseTime, pointsEarned]
+      properties:
+        roundNumber: { type: integer }
+        roundName: { type: string }
+        questionId: { type: integer }
+        correct: { type: boolean }
+        responseTime: { type: number }
+        pointsEarned: { type: integer }
+        selectedAnswer: { type: string }
+
+    AnswerInput:
+      type: object
+      required: [questionId, selectedAnswer, responseTimeMs]
+      properties:
+        questionId: { type: integer }
+        selectedAnswer: { type: string }
+        responseTimeMs: { type: integer }
+
+    AnswerResult:
+      type: object
+      required: [correct, correctAnswer, pointsEarned, explanation, matchComplete, nextQuestion]
+      properties:
+        correct: { type: boolean }
+        correctAnswer: { type: string }
+        pointsEarned: { type: integer }
+        comboMultiplier: { type: number }
+        explanation: { type: string }
+        steps:
+          type: array
+          items: { type: string }
+        matchComplete: { type: boolean }
+        nextQuestion:
+          $ref: "#/components/schemas/Question"
+
+    MatchSummary:
+      type: object
+      required: [matchId, score, accuracy, belt, eloChange, newElo, rounds]
+      properties:
+        matchId: { type: integer }
+        score: { type: integer }
+        accuracy: { type: number }
+        belt: { type: string }
+        eloChange: { type: integer }
+        newElo: { type: integer }
+        knockouts: { type: integer }
+        longestCombo: { type: integer }
+        fastestAnswer: { type: number }
+        rounds:
+          type: array
+          items:
+            $ref: "#/components/schemas/RoundSummary"
+
+    LeaderboardEntry:
+      type: object
+      required: [rank, studentId, username, displayName, belt, elo, winRate, totalMatches]
+      properties:
+        rank: { type: integer }
+        studentId: { type: integer }
+        username: { type: string }
+        displayName: { type: string }
+        school: { type: ["string", "null"] }
+        belt: { type: string }
+        elo: { type: integer }
+        winRate: { type: number }
+        totalMatches: { type: integer }
+        streak: { type: integer }
+
+    AnalyticsOverview:
+      type: object
+      required: [totalStudents, totalMatches, totalQuestions, totalRecordCards, avgAccuracy, activeToday]
+      properties:
+        totalStudents: { type: integer }
+        totalMatches: { type: integer }
+        totalQuestions: { type: integer }
+        totalRecordCards: { type: integer }
+        avgAccuracy: { type: number }
+        activeToday: { type: integer }
+        questionsGeneratedToday: { type: integer }
+        topCategory: { type: string }
+
+    DifficultyBucket:
+      type: object
+      required: [difficulty, topic, count, avgAccuracy]
+      properties:
+        difficulty: { type: string }
+        topic: { type: string }
+        count: { type: integer }
+        avgAccuracy: { type: number }
+
+    TrendPoint:
+      type: object
+      required: [date, matchesPlayed, avgScore, avgAccuracy]
+      properties:
+        date: { type: string }
+        matchesPlayed: { type: integer }
+        avgScore: { type: number }
+        avgAccuracy: { type: number }
+        newStudents: { type: integer }
+
+    TopicBreakdown:
+      type: object
+      required: [topic, totalAttempts, correctAttempts, accuracy, avgTime]
+      properties:
+        topic: { type: string }
+        totalAttempts: { type: integer }
+        correctAttempts: { type: integer }
+        accuracy: { type: number }
+        avgTime: { type: number }
+
+    Provider:
+      type: object
+      required: [id, name, status, model, requestCount, errorRate]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        status: { type: string }
+        model: { type: string }
+        requestCount: { type: integer }
+        errorRate: { type: number }
+        avgLatencyMs: { type: number }
+        rateLimitRpm: { type: integer }
+
+    ProviderUsage:
+      type: object
+      required: [totalRequests, successfulRequests, failedRequests, providers]
+      properties:
+        totalRequests: { type: integer }
+        successfulRequests: { type: integer }
+        failedRequests: { type: integer }
+        providers:
+          type: array
+          items:
+            $ref: "#/components/schemas/Provider"
+
+    DashboardData:
+      type: object
+      required: [student, stats, mastery, recentMatches, upcomingEvents, recommendations]
+      properties:
+        student:
+          $ref: "#/components/schemas/Student"
+        stats:
+          $ref: "#/components/schemas/StudentStats"
+        mastery:
+          type: array
+          items:
+            $ref: "#/components/schemas/TopicMastery"
+        recentMatches:
+          type: array
+          items:
+            $ref: "#/components/schemas/Match"
+        upcomingEvents:
+          type: array
+          items:
+            type: object
+            required: [id, name, startAt, type]
+            properties:
+              id: { type: integer }
+              name: { type: string }
+              startAt: { type: string }
+              type: { type: string }
+              participants: { type: integer }
+        recommendations:
+          $ref: "#/components/schemas/Recommendations"

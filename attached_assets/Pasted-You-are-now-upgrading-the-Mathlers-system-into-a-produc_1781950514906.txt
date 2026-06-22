@@ -1,0 +1,199 @@
+You are now upgrading the Mathlers system into a production-grade educational engine.
+
+This is NOT a feature expansion task. This is a core architectural correction.
+
+Your priority is to build a mathematically correct, deterministic, and verifiable learning system.
+
+────────────────────────────────────────
+🚨 NON-NEGOTIABLE PRINCIPLES
+────────────────────────────────────────
+
+1. AI is NEVER allowed to compute final math answers.
+   - All calculations must be done via deterministic code (Python: decimal, sympy, numpy).
+   - LLM is ONLY for:
+     → Story framing
+     → Boxing theme narrative
+     → Rewriting and variation
+
+2. Every generated question MUST be:
+   → reproducible
+   → verifiable
+   → template-based
+   → traceable to a Record Card
+
+3. No feature development (UI, tournaments, multiplayer) until:
+   → question engine
+   → validation system
+   → record system
+   are fully production-ready.
+
+────────────────────────────────────────
+🧠 CORE ENGINE YOU MUST BUILD
+────────────────────────────────────────
+
+You must implement the following 5-layer system:
+
+─────────────────
+1. RECORD INTELLIGENCE LAYER
+─────────────────
+
+Build a system that:
+- Normalizes raw real-world data into Record Cards
+- Converts all values into numeric canonical form
+- Handles units (USD, %, seconds, viewers, etc.)
+- Detects anomalies and invalid records
+- Maintains version history of records
+
+Required schema:
+- id
+- title
+- value
+- unit
+- previous_value
+- category
+- subcategory
+- date
+- source_url
+- verified
+- version
+
+─────────────────
+2. QUESTION TEMPLATE ENGINE
+─────────────────
+
+DO NOT generate questions freely.
+
+Instead:
+- Create 30–50 deterministic templates:
+  * percentage increase/decrease
+  * ratio comparison
+  * speed/time/distance
+  * probability from datasets
+  * statistics (mean, median, change)
+  * large number operations
+
+Each template must:
+- accept structured inputs
+- output a question blueprint
+
+─────────────────
+3. DETERMINISTIC MATH SOLVER
+─────────────────
+
+Implement a pure computation layer:
+
+- NO LLM usage allowed here
+- All answers computed using code only
+- Must support:
+  - percentages
+  - ratios
+  - algebra
+  - statistics
+  - unit conversions
+
+Each solver must return:
+- exact answer
+- formatted answer
+- step-by-step computation log
+
+─────────────────
+4. VALIDATION ENGINE
+─────────────────
+
+Every generated question MUST pass:
+
+Step 1: recompute answer from raw inputs
+Step 2: compare with generated answer
+Step 3: verify MCQ options correctness
+Step 4: reject duplicates using hashing
+
+If ANY mismatch occurs:
+→ discard question immediately
+
+No exceptions.
+
+─────────────────
+5. DIFFICULTY & MASTERY ENGINE
+─────────────────
+
+Implement student modeling:
+
+Track per student:
+- topic accuracy
+- speed per question
+- improvement trend
+- weak areas
+
+Use this to:
+- adapt difficulty dynamically
+- select next question type
+- personalize practice sets
+
+────────────────────────────────────────
+🎯 QUESTION GENERATION PIPELINE
+────────────────────────────────────────
+
+The correct flow is:
+
+Record Card
+→ Template Selection
+→ Variable Injection
+→ Deterministic Solver
+→ Validation Engine
+→ AI Narrative Layer (ONLY for storytelling)
+→ Final Question Output
+
+NOT:
+LLM generating full questions or answers.
+
+────────────────────────────────────────
+🥊 OUTPUT FORMAT REQUIREMENTS
+────────────────────────────────────────
+
+Each question must include:
+
+- Boxing round name (Warmup/Jab/Hook/Uppercut/Knockout)
+- Scenario (AI-generated)
+- Question (template-based)
+- Options (if MCQ)
+- Correct answer (verified by code)
+- Step-by-step solution (computed, not guessed)
+- Difficulty tag
+- Record Card reference ID
+
+────────────────────────────────────────
+🚫 FORBIDDEN PRACTICES
+────────────────────────────────────────
+
+- No AI-generated arithmetic answers
+- No unverified math outputs
+- No free-form question generation
+- No duplicate questions
+- No UI work before engine completion
+- No tournament features before validation stability
+
+────────────────────────────────────────
+⚙️ ENGINE FIRST RULE
+────────────────────────────────────────
+
+If any feature does not improve:
+→ correctness
+→ learning accuracy
+→ or system reliability
+
+DO NOT implement it.
+
+Focus entirely on building a mathematically correct, scalable question engine first.
+
+────────────────────────────────────────
+🎯 FINAL GOAL
+────────────────────────────────────────
+
+Generate:
+- infinite questions
+- zero mathematical errors
+- fully traceable to real-world records
+- adaptive difficulty per student
+- production-grade reliability
+
+This system must behave like a learning machine, not a chatbot.

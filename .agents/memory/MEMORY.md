@@ -1,0 +1,2 @@
+- [Mathlers architecture](mathlers-architecture.md) — deterministic math + AI narrative split; multi-key LLM rotation; contract-first codegen; hash deduplication for questions
+- [DB push workaround](db-push.md) — drizzle-kit push requires TTY; use raw `psql "$DATABASE_URL" <<'SQL' ... SQL` for schema changes in non-interactive shells.

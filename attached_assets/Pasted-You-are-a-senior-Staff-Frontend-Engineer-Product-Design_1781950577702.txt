@@ -1,0 +1,342 @@
+You are a senior Staff Frontend Engineer, Product Designer, and UX Architect.
+
+You are building the PRODUCTION FRONTEND for Mathlers.
+
+Mathlers is NOT a generic LMS, quiz website, or exam portal.
+
+Mathlers is a boxing-themed mathematics competition platform where students learn mathematics through real-world records and compete in matches.
+
+Your job is to design and implement a frontend that feels like a competitive game while maintaining educational effectiveness.
+
+────────────────────────────────────
+CORE PRODUCT PRINCIPLES
+────────────────────────────────────
+
+1. Learning must feel like competition.
+2. Competition must never compromise learning.
+3. Speed and responsiveness are critical.
+4. Mobile experience is first-class.
+5. Children must understand the interface instantly.
+6. UI should reduce cognitive load.
+7. Frontend must be production-ready, not a prototype.
+
+────────────────────────────────────
+PRIMARY USER TYPES
+────────────────────────────────────
+
+Student
+Teacher
+Parent
+Moderator
+Admin
+
+Students are the primary audience.
+
+All design decisions must prioritize students first.
+
+────────────────────────────────────
+DESIGN LANGUAGE
+────────────────────────────────────
+
+Theme:
+Boxing Ring + Esports Arena + Educational Platform
+
+Avoid:
+
+* Traditional school portals
+* Corporate dashboards
+* Boring LMS aesthetics
+* Generic quiz apps
+
+Desired feeling:
+
+Student enters platform and feels:
+
+"I am entering an arena."
+
+NOT:
+
+"I am taking a test."
+
+────────────────────────────────────
+REQUIRED STUDENT EXPERIENCE
+────────────────────────────────────
+
+Student Dashboard
+
+Must include:
+
+* Current Belt Rank
+* ELO Rating
+* Daily Challenge
+* Active Streak
+* Recent Matches
+* Topic Mastery Progress
+* Upcoming Events
+* Recommended Training
+
+Primary CTA:
+
+"Enter Arena"
+
+────────────────────────────────────
+MATCH EXPERIENCE
+────────────────────────────────────
+
+Create a dedicated Match Screen.
+
+Match progression:
+
+Warm-up
+Jab
+Hook
+Uppercut
+Knockout
+
+Display:
+
+* Round Name
+* Round Progress
+* Timer
+* Current Score
+* Combo Multiplier
+* Accuracy Percentage
+* Remaining Questions
+
+The student must never lose awareness of:
+
+* time
+* score
+* progress
+
+────────────────────────────────────
+QUESTION INTERFACE
+────────────────────────────────────
+
+Question screen must include:
+
+1. Boxing Round Header
+2. Real-world Record Card
+3. Question Statement
+4. Multiple Choice Answers
+5. Submit Action
+6. Hint Button
+7. Solution View (after answering)
+
+Question cards must be readable on:
+
+* phones
+* tablets
+* laptops
+
+No horizontal scrolling.
+
+────────────────────────────────────
+RECORD CARD COMPONENT
+────────────────────────────────────
+
+Create reusable Record Card UI.
+
+Fields:
+
+* Record Title
+* Holder
+* Numeric Value
+* Unit
+* Date
+* Category
+* Source
+
+Purpose:
+
+Students should understand:
+
+"This question comes from a real-world achievement."
+
+────────────────────────────────────
+PROGRESS & MASTERY
+────────────────────────────────────
+
+Create Topic Mastery View.
+
+Show:
+
+* Algebra
+* Arithmetic
+* Percentages
+* Ratios
+* Statistics
+* Probability
+* Geometry
+
+Each topic must display:
+
+* mastery %
+* trend
+* accuracy
+* average response time
+
+Students should instantly know:
+
+"What am I good at?"
+"What should I train next?"
+
+────────────────────────────────────
+LEADERBOARDS
+────────────────────────────────────
+
+Create:
+
+Daily
+Weekly
+Monthly
+All-Time
+
+Filters:
+
+Global
+School
+Class
+Age Group
+
+Display:
+
+Rank
+Username
+Belt
+ELO
+Win Rate
+
+Must support pagination and virtualization.
+
+────────────────────────────────────
+TOURNAMENTS
+────────────────────────────────────
+
+Tournament page must include:
+
+* Upcoming tournaments
+* Live tournaments
+* Completed tournaments
+
+Bracket visualization required.
+
+Students should easily understand progression.
+
+────────────────────────────────────
+REAL-TIME FEATURES
+────────────────────────────────────
+
+Design frontend architecture for:
+
+* live score updates
+* matchmaking status
+* tournament updates
+* leaderboard updates
+
+Use WebSocket-ready architecture.
+
+Do not hardcode polling logic.
+
+────────────────────────────────────
+ACCESSIBILITY
+────────────────────────────────────
+
+Must support:
+
+* keyboard navigation
+* screen readers
+* high contrast mode
+* responsive layouts
+
+Target WCAG AA minimum.
+
+────────────────────────────────────
+PERFORMANCE REQUIREMENTS
+────────────────────────────────────
+
+Lighthouse:
+
+Performance > 90
+Accessibility > 90
+Best Practices > 90
+
+Avoid:
+
+* unnecessary rerenders
+* oversized bundles
+* blocking requests
+
+Implement:
+
+* code splitting
+* lazy loading
+* route-based chunking
+* caching
+
+────────────────────────────────────
+TECHNICAL STACK
+────────────────────────────────────
+
+Framework:
+Next.js (App Router)
+
+Language:
+TypeScript
+
+Styling:
+Tailwind CSS
+
+State:
+Zustand or TanStack Query
+
+Forms:
+React Hook Form
+
+Animations:
+Framer Motion
+
+Charts:
+Recharts
+
+Icons:
+Lucide
+
+────────────────────────────────────
+ARCHITECTURE REQUIREMENTS
+────────────────────────────────────
+
+Create:
+
+/app
+/components
+/features
+/services
+/hooks
+/stores
+/types
+/utils
+
+Use feature-based architecture.
+
+Avoid giant component folders.
+
+────────────────────────────────────
+OUTPUT REQUIRED
+────────────────────────────────────
+
+Provide:
+
+1. Complete page hierarchy
+2. Route structure
+3. Component hierarchy
+4. State architecture
+5. API integration strategy
+6. Responsive design strategy
+7. Accessibility strategy
+8. Reusable component library
+9. Detailed implementation plan
+
+Do NOT provide mockups only.
+
+Provide production-ready architecture and implementation details suitable for immediate development.
